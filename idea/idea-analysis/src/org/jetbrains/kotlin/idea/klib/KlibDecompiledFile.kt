@@ -3,14 +3,14 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package org.jetbrains.kotlin.ide.konan.decompiler
+package org.jetbrains.kotlin.idea.klib
 
 import com.intellij.openapi.vfs.VirtualFile
 import org.jetbrains.kotlin.idea.decompiler.KotlinDecompiledFileViewProvider
 import org.jetbrains.kotlin.idea.decompiler.KtDecompiledFile
 import org.jetbrains.kotlin.idea.decompiler.textBuilder.DecompiledText
 
-class KotlinNativeDecompiledFile(
+class KlibDecompiledFile(
     provider: KotlinDecompiledFileViewProvider,
     text: (VirtualFile) -> DecompiledText
 ) : KtDecompiledFile(provider, text)
