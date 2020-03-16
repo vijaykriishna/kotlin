@@ -2164,6 +2164,39 @@ public class IrBlackBoxCodegenTestGenerated extends AbstractIrBlackBoxCodegenTes
             }
         }
 
+        @TestMetadata("compiler/testData/codegen/box/callableReference/equality")
+        @TestDataPath("$PROJECT_ROOT")
+        @RunWith(JUnit3RunnerWithInners.class)
+        public static class Equality extends AbstractIrBlackBoxCodegenTest {
+            private void runTest(String testDataFilePath) throws Exception {
+                KotlinTestUtils.runTest(this::doTest, TargetBackend.JVM_IR, testDataFilePath);
+            }
+
+            public void testAllFilesPresentInEquality() throws Exception {
+                KotlinTestUtils.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/codegen/box/callableReference/equality"), Pattern.compile("^(.+)\\.kt$"), null, TargetBackend.JVM_IR, true);
+            }
+
+            @TestMetadata("capturedDefaults.kt")
+            public void testCapturedDefaults() throws Exception {
+                runTest("compiler/testData/codegen/box/callableReference/equality/capturedDefaults.kt");
+            }
+
+            @TestMetadata("capturedVararg.kt")
+            public void testCapturedVararg() throws Exception {
+                runTest("compiler/testData/codegen/box/callableReference/equality/capturedVararg.kt");
+            }
+
+            @TestMetadata("coercionToUnit.kt")
+            public void testCoercionToUnit() throws Exception {
+                runTest("compiler/testData/codegen/box/callableReference/equality/coercionToUnit.kt");
+            }
+
+            @TestMetadata("simpleEquality.kt")
+            public void testSimpleEquality() throws Exception {
+                runTest("compiler/testData/codegen/box/callableReference/equality/simpleEquality.kt");
+            }
+        }
+
         @TestMetadata("compiler/testData/codegen/box/callableReference/function")
         @TestDataPath("$PROJECT_ROOT")
         @RunWith(JUnit3RunnerWithInners.class)
