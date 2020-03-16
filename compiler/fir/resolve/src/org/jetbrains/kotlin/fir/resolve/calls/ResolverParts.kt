@@ -40,7 +40,7 @@ abstract class ResolutionStage {
 
 abstract class CheckerStage : ResolutionStage()
 
-internal fun FirExpression.isSuperReferenceExpression(): Boolean {
+fun FirExpression.isSuperReferenceExpression(): Boolean {
     return if (this is FirQualifiedAccessExpression) {
         val calleeReference = calleeReference
         calleeReference is FirSuperReference
