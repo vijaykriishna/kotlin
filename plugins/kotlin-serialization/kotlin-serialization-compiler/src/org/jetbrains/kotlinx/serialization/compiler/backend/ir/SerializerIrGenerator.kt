@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2018 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2010-2020 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -188,6 +188,18 @@ open class SerializerIrGenerator(val irClass: IrClass, final override val compil
 
         val kSerType = ((irFun.returnType as IrSimpleType).arguments.first() as IrTypeProjection).type
         val array = createArrayOfExpression(kSerType, allSerializers)
+        +irReturn(array)
+    }
+
+    override fun generateTypeParamsSerializersGetter(function: FunctionDescriptor) = irClass.contributeFunction(function) { irFun ->
+        val typeParams = serializableDescriptor.declaredTypeParameters.mapIndexed { idx, _ ->
+            irGetField(
+                irGet(irFun.dispatchReceiverParameter!!),
+                compilerContext.symbolTable.referenceField(localSerializersFieldsDescriptors[idx]).owner
+            )
+        }
+        val kSerType = ((irFun.returnType as IrSimpleType).arguments.first() as IrTypeProjection).type
+        val array = createArrayOfExpression(kSerType, typeParams)
         +irReturn(array)
     }
 
