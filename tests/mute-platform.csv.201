@@ -207,13 +207,6 @@ org.jetbrains.kotlin.idea.refactoring.rename.RenameTestGenerated.testJavaEnumVal
 org.jetbrains.kotlin.idea.refactoring.rename.RenameTestGenerated.testOverloadsWithSameOrigin_OverloadsWithSameOrigin, Bad imports after rename
 org.jetbrains.kotlin.idea.refactoring.rename.RenameTestGenerated.testRenameKotlinMultifileFacadeClassWithJvmNameByRef_RenameKotlinMultifileFacadeClassWithJvmName, KT-34689
 org.jetbrains.kotlin.idea.refactoring.rename.RenameTestGenerated.testSecondaryCnstructorParameterRedeclaration_SecondaryConstructorParameterRedeclaration, IDEA-234737 element.parent must not be null
-org.jetbrains.kotlin.idea.refactoring.suggested.KotlinSuggestedRefactoringChangeListenerTest.test1, Additional signature
-org.jetbrains.kotlin.idea.refactoring.suggested.KotlinSuggestedRefactoringChangeListenerTest.testAddImport, Additional signature
-org.jetbrains.kotlin.idea.refactoring.suggested.KotlinSuggestedRefactoringChangeListenerTest.testAddImportWithBlankLineInsertion, Additional signature
-org.jetbrains.kotlin.idea.refactoring.suggested.KotlinSuggestedRefactoringChangeListenerTest.testAddImportWithBlankLinesRemoval, Additional signature
-org.jetbrains.kotlin.idea.refactoring.suggested.KotlinSuggestedRefactoringChangeListenerTest.testCommentTyping, Additional signature
-org.jetbrains.kotlin.idea.refactoring.suggested.KotlinSuggestedRefactoringChangeListenerTest.testNewSecondaryConstructor, IDEA-234737 element.parent must not be null
-org.jetbrains.kotlin.idea.refactoring.suggested.KotlinSuggestedRefactoringTest.testAddSecondaryConstructorParameter, IDEA-234737 element.parent must not be null
 org.jetbrains.kotlin.idea.repl.IdeReplCompletionTestGenerated.testBuiltInMember, KT-34825
 org.jetbrains.kotlin.idea.repl.IdeReplCompletionTestGenerated.testDefinedClass, KT-34825
 org.jetbrains.kotlin.idea.repl.IdeReplCompletionTestGenerated.testDefinedClassMember, KT-34825
