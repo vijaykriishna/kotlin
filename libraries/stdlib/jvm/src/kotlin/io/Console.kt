@@ -167,13 +167,6 @@ internal object LineReader {
     @Synchronized
     fun readLine(inputStream: InputStream, charset: Charset): String? { // charset == null -> use default
         if (!::decoder.isInitialized || decoder.charset() != charset) updateCharset(charset)
-        val decoder = decoder
-        val directEOL = directEOL
-        val bytes = bytes
-        val chars = chars
-        val byteBuf = byteBuf
-        val charBuf = charBuf
-        val sb = sb
         var nBytes = 0
         var nChars = 0
         while (true) {
@@ -194,7 +187,7 @@ internal object LineReader {
                 // Decode the bytes that were read
                 byteBuf.limit(nBytes) // byteBuf position is always zero
                 charBuf.position(nChars) // charBuf limit is always BUFFER_SIZE
-                nChars = decode(false, decoder, byteBuf, chars, charBuf, sb)
+                nChars = decode(false)
                 // Break when we have decoded end of line
                 if (nChars > 0 && chars[nChars - 1] == '\n') {
                     byteBuf.position(0) // reset position for next use
@@ -221,11 +214,7 @@ internal object LineReader {
     }
 
     // The result is the number of chars in charBuf
-    private fun decode(
-        endOfInput: Boolean,
-        decoder: CharsetDecoder, byteBuf: ByteBuffer,
-        chars: CharArray, charBuf: CharBuffer, sb: StringBuilder
-    ): Int {
+    private fun decode(endOfInput: Boolean): Int {
         while (true) {
             val coderResult: CoderResult = decoder.decode(byteBuf, charBuf, endOfInput)
             if (coderResult.isError) {
@@ -252,7 +241,7 @@ internal object LineReader {
     private fun decodeEndOfInput(nBytes: Int, nChars: Int): Int {
         byteBuf.limit(nBytes) // byteBuf position is always zero
         charBuf.position(nChars) // charBuf limit is always BUFFER_SIZE
-        return decode(true, decoder, byteBuf, chars, charBuf, sb).also { // throws exception if partial char
+        return decode(true).also { // throws exception if partial char
             // reset decoder and byteBuf for next use
             decoder.reset()
             byteBuf.position(0)
