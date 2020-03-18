@@ -30,35 +30,3 @@ fun runPartialGradleImport(project: Project) {
             .build()
     )
 }
-
-private var Project.notificationPanel: Notification?
-        by UserDataProperty<Project, Notification>(Key.create("load.script.configuration.panel"))
-
-
-fun showNotificationForProjectImport(project: Project, callback: () -> Unit) {
-    if (project.notificationPanel != null) return
-
-    val notification = getNotificationGroup().createNotification(
-        "Script configuration may be changed. If you want to reload them, run `Sync Project with Gradle files`",
-        NotificationType.INFORMATION
-    )
-    notification.addAction(NotificationAction.createSimple("Sync Project with Gradle files") {
-        callback()
-    })
-    notification.addAction(NotificationAction.createSimple("Hide") {
-        notification.hideBalloon()
-    })
-    project.notificationPanel = notification
-    notification.notify(project)
-}
-
-fun hideNotificationForProjectImport(project: Project): Boolean {
-    if (project.notificationPanel == null) return false
-    project.notificationPanel?.expire()
-    return true
-}
-
-private fun getNotificationGroup(): NotificationGroup {
-    return NotificationGroup.findRegisteredGroup("Kotlin script configurations")
-        ?: NotificationGroup("Kotlin script configurations", NotificationDisplayType.STICKY_BALLOON, true)
-}
