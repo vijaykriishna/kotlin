@@ -42,7 +42,7 @@ class CoroutineDumpAction : AnAction(), AnAction.TransparentUpdate {
                 override fun contextAction() {
                     val states = CoroutineDebugProbesProxy(context.suspendContext ?: return)
                         .dumpCoroutines()
-                    if (states.isOk()) {
+                    if (!states.isOk()) {
                         val message = KotlinDebuggerCoroutinesBundle.message("coroutine.dump.failed")
                         XDebuggerManagerImpl.NOTIFICATION_GROUP.createNotification(message,MessageType.ERROR).notify(project)
                     } else {
