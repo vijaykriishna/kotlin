@@ -45,6 +45,10 @@ class DebugInfoDiagnosticFactory1 : DiagnosticFactory1<PsiElement, String>,
 
             this.on(expression, Renderers.renderExpressionType(type, dataFlowTypes))
         }
+        "AS_CALL" -> {
+            val (fqName, typeCall) = CheckerTestUtil.getCallDebugInfo(expression, bindingContext)
+            this.on(expression, Renderers.renderCallInfo(fqName, typeCall))
+        }
         else -> throw NotImplementedError("Creation diagnostic '$name' isn't supported.")
     }
 
@@ -64,6 +68,11 @@ class DebugInfoDiagnosticFactory1 : DiagnosticFactory1<PsiElement, String>,
     companion object {
         val EXPRESSION_TYPE = create(
             "EXPRESSION_TYPE",
+            Severity.INFO,
+            true
+        )
+        val AS_CALL = create(
+            "AS_CALL",
             Severity.INFO,
             true
         )
