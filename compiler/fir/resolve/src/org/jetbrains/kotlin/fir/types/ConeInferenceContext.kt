@@ -288,8 +288,15 @@ interface ConeInferenceContext : TypeSystemInferenceExtensionContext, ConeTypeCo
         return object : AbstractConeSubstitutor(),
             TypeSubstitutorMarker {
             override fun substituteType(type: ConeKotlinType): ConeKotlinType? {
+                if (type is ConeFlexibleType) return substituteFlexibleType(type)
                 val new = map[type.typeConstructor()] ?: return null
                 return (new as ConeKotlinType).approximateIntegerLiteralType().updateNullabilityIfNeeded(type)
+            }
+
+            private fun substituteFlexibleType(type: ConeFlexibleType): ConeKotlinType? {
+                val lowerBound = substituteType(type.lowerBound) ?: return null
+                val upperBound = substituteType(type.upperBound) ?: return null
+                return coneFlexibleOrSimpleType(this@ConeInferenceContext, lowerBound, upperBound)
             }
         }
     }
