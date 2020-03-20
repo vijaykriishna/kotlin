@@ -26,6 +26,8 @@ import org.jetbrains.kotlin.idea.KotlinIdeaGradleBundle
 import org.jetbrains.kotlin.idea.core.script.ScriptConfigurationManager
 import org.jetbrains.kotlin.idea.core.script.configuration.cache.CachedConfigurationInputs
 import org.jetbrains.kotlin.idea.core.script.configuration.cache.ScriptConfigurationSnapshot
+import org.jetbrains.kotlin.idea.importing.KOTLIN_DSL_SCRIPT_MODELS
+import org.jetbrains.kotlin.idea.importing.KotlinDslScriptModel
 import org.jetbrains.kotlin.idea.scripting.gradle.GradleScriptInputsWatcher
 import org.jetbrains.kotlin.idea.scripting.gradle.getGradleScriptInputsStamp
 import org.jetbrains.kotlin.idea.scripting.gradle.saveGradleProjectRootsAfterImport

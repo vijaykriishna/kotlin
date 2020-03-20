@@ -3,15 +3,16 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package org.jetbrains.kotlin.idea.scripting.gradle.importing
+package org.jetbrains.kotlin.idea.importing
 
 import com.intellij.openapi.externalSystem.model.DataNode
 import com.intellij.openapi.externalSystem.model.project.ProjectData
 import org.gradle.tooling.model.idea.IdeaProject
 import org.gradle.tooling.model.kotlin.dsl.KotlinDslScriptsModel
-import org.jetbrains.kotlin.idea.scripting.gradle.kotlinDslScriptsModelImportSupported
+import org.jetbrains.kotlin.gradle.kotlinDslScriptsModelImportSupported
+import org.jetbrains.plugins.gradle.model.Build
+import org.jetbrains.plugins.gradle.model.ClassSetImportModelProvider
 import org.jetbrains.plugins.gradle.model.ProjectImportModelProvider
-import org.jetbrains.plugins.gradle.model.ClassSetBuildImportModelProvider
 
 class KotlinDslScriptModelResolver : KotlinDslScriptModelResolverCommon() {
     override fun requiresTaskRunning() = true
@@ -19,7 +20,8 @@ class KotlinDslScriptModelResolver : KotlinDslScriptModelResolverCommon() {
     override fun getModelProvider() = KotlinDslScriptModelProvider()
 
     override fun getProjectsLoadedModelProvider(): ProjectImportModelProvider? {
-        return ClassSetBuildImportModelProvider(
+        return ClassSetImportModelProvider(
+            emptySet(),
             setOf(KotlinDslScriptAdditionalTask::class.java)
         )
     }
@@ -28,7 +30,7 @@ class KotlinDslScriptModelResolver : KotlinDslScriptModelResolverCommon() {
         super.populateProjectExtraModels(gradleProject, ideProject)
 
         if (kotlinDslScriptsModelImportSupported(resolverCtx.projectGradleVersion)) {
-            populateBuildModels(gradleProject, ideProject)
+            populateBuildModels(resolverCtx.models.mainBuild, ideProject)
 
             resolverCtx.models.includedBuilds.forEach { includedRoot ->
                 populateBuildModels(includedRoot, ideProject)
@@ -37,13 +39,13 @@ class KotlinDslScriptModelResolver : KotlinDslScriptModelResolverCommon() {
     }
 
     private fun populateBuildModels(
-        root: IdeaProject,
+        root: Build,
         ideProject: DataNode<ProjectData>
     ) {
-        root.modules.forEach {
-            if (it.gradleProject.parent == null) {
-                resolverCtx.getExtraProject(it, KotlinDslScriptsModel::class.java)?.let { model ->
-                    processScriptModel(ideProject, model, it.name)
+        root.projects.forEach {
+            if (it.projectIdentifier.projectPath == ":") {
+                resolverCtx.models.getModel(it, KotlinDslScriptsModel::class.java)?.let { model ->
+                    processScriptModel(ideProject, model, it.projectIdentifier.projectPath)
                 }
             }
         }

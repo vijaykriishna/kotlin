@@ -5,6 +5,8 @@
 
 package org.jetbrains.kotlin.gradle
 
+import org.gradle.util.GradleVersion
+
 fun Class<*>.getMethodOrNull(name: String, vararg parameterTypes: Class<*>) =
     try {
         getMethod(name, *parameterTypes)
@@ -21,3 +23,9 @@ fun Class<*>.getDeclaredMethodOrNull(name: String, vararg parameterTypes: Class<
 
 fun compilationFullName(simpleName: String, classifier: String?) =
     if (classifier != null) classifier + simpleName.capitalize() else simpleName
+
+const val minimal_gradle_version_supported = "6.0"
+
+fun kotlinDslScriptsModelImportSupported(currentGradleVersion: String): Boolean {
+    return GradleVersion.version(currentGradleVersion) >= GradleVersion.version(minimal_gradle_version_supported)
+}
