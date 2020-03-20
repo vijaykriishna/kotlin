@@ -78,7 +78,7 @@ object BuiltinSpecialProperties {
 
     private fun CallableMemberDescriptor.hasBuiltinSpecialPropertyFqNameImpl(): Boolean {
         if (fqNameOrNull() in SPECIAL_FQ_NAMES && valueParameters.isEmpty()) return true
-        if (!KotlinBuiltIns.isBuiltIn(this)) return false
+        //if (!KotlinBuiltIns.isBuiltIn(this)) return false
 
         return overriddenDescriptors.any { hasBuiltinSpecialPropertyFqName(it) }
     }
@@ -87,7 +87,7 @@ object BuiltinSpecialProperties {
         GETTER_JVM_NAME_TO_PROPERTIES_SHORT_NAME_MAP[name1] ?: emptyList()
 
     fun CallableMemberDescriptor.getBuiltinSpecialPropertyGetterName(): String? {
-        assert(KotlinBuiltIns.isBuiltIn(this)) { "This method is defined only for builtin members, but $this found" }
+        //assert(KotlinBuiltIns.isBuiltIn(this)) { "This method is defined only for builtin members, but $this found" }
 
         val descriptor = propertyIfAccessor.firstOverridden { hasBuiltinSpecialPropertyFqName(it) } ?: return null
         return PROPERTY_FQ_NAME_TO_JVM_GETTER_NAME_MAP[descriptor.fqNameSafe]?.asString()
@@ -249,7 +249,7 @@ object BuiltinMethodsWithDifferentJvmName {
     }
 
     fun isBuiltinFunctionWithDifferentNameInJvm(functionDescriptor: SimpleFunctionDescriptor): Boolean {
-        return KotlinBuiltIns.isBuiltIn(functionDescriptor) && functionDescriptor.firstOverridden {
+        return /*KotlinBuiltIns.isBuiltIn(functionDescriptor) && */functionDescriptor.firstOverridden {
             SIGNATURE_TO_JVM_REPRESENTATION_NAME.containsKey(functionDescriptor.computeJvmSignature())
         } != null
     }
@@ -321,8 +321,7 @@ fun getJvmMethodNameIfSpecial(callableMemberDescriptor: CallableMemberDescriptor
 private fun getOverriddenBuiltinThatAffectsJvmName(
     callableMemberDescriptor: CallableMemberDescriptor
 ): CallableMemberDescriptor? =
-    if (KotlinBuiltIns.isBuiltIn(callableMemberDescriptor)) callableMemberDescriptor.getOverriddenBuiltinWithDifferentJvmName()
-    else null
+    callableMemberDescriptor.getOverriddenBuiltinWithDifferentJvmName()
 
 fun ClassDescriptor.hasRealKotlinSuperClassWithOverrideOf(
     specialCallableDescriptor: CallableDescriptor
