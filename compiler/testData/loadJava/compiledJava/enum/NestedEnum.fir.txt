@@ -1,0 +1,4 @@
+public open class NestedEnum : R|kotlin/Any| {
+    public constructor(): R|NestedEnum|
+
+}

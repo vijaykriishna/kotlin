@@ -513,6 +513,11 @@ public class IrLoadJavaTestGenerated extends AbstractIrLoadJavaTest {
             public void testJavaEnum() throws Exception {
                 runTest("compiler/testData/loadJava/compiledJava/enum/JavaEnum.java");
             }
+
+            @TestMetadata("NestedEnum.java")
+            public void testNestedEnum() throws Exception {
+                runTest("compiler/testData/loadJava/compiledJava/enum/NestedEnum.java");
+            }
         }
 
         @TestMetadata("compiler/testData/loadJava/compiledJava/javaBean")
