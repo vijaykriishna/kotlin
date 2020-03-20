@@ -266,7 +266,12 @@ object BuiltinMethodsWithDifferentJvmName {
 fun <T : CallableMemberDescriptor> T.getOverriddenBuiltinWithDifferentJvmName(): T? {
     if (name !in BuiltinMethodsWithDifferentJvmName.ORIGINAL_SHORT_NAMES
         && propertyIfAccessor.name !in BuiltinSpecialProperties.SPECIAL_SHORT_NAMES
-    ) return null
+    ) {
+        if (!name.isSpecial ||
+            Name.identifier(name.asString().drop(5).dropLast(1)) !in BuiltinSpecialProperties.SPECIAL_SHORT_NAMES
+        ) return null
+        return this
+    }
 
     return when (this) {
         is PropertyDescriptor, is PropertyAccessorDescriptor ->
@@ -311,6 +316,11 @@ fun <T : CallableMemberDescriptor> T.getOverriddenBuiltinReflectingJvmDescriptor
 fun getJvmMethodNameIfSpecial(callableMemberDescriptor: CallableMemberDescriptor): String? {
     val overriddenBuiltin = getOverriddenBuiltinThatAffectsJvmName(callableMemberDescriptor)?.propertyIfAccessor
         ?: return null
+    if (!KotlinBuiltIns.isBuiltIn(overriddenBuiltin)) {
+        val fqNameSafe = overriddenBuiltin.fqNameSafe
+        val trimmed = FqName(fqNameSafe.parent().asString() + "." + fqNameSafe.shortName().asString().drop(5).dropLast(1))
+        return BuiltinSpecialProperties.PROPERTY_FQ_NAME_TO_JVM_GETTER_NAME_MAP[trimmed]?.asString()
+    }
     return when (overriddenBuiltin) {
         is PropertyDescriptor -> overriddenBuiltin.getBuiltinSpecialPropertyGetterName()
         is SimpleFunctionDescriptor -> BuiltinMethodsWithDifferentJvmName.getJvmName(overriddenBuiltin)?.asString()
@@ -321,8 +331,7 @@ fun getJvmMethodNameIfSpecial(callableMemberDescriptor: CallableMemberDescriptor
 private fun getOverriddenBuiltinThatAffectsJvmName(
     callableMemberDescriptor: CallableMemberDescriptor
 ): CallableMemberDescriptor? =
-    if (KotlinBuiltIns.isBuiltIn(callableMemberDescriptor)) callableMemberDescriptor.getOverriddenBuiltinWithDifferentJvmName()
-    else null
+    callableMemberDescriptor.getOverriddenBuiltinWithDifferentJvmName()
 
 fun ClassDescriptor.hasRealKotlinSuperClassWithOverrideOf(
     specialCallableDescriptor: CallableDescriptor
