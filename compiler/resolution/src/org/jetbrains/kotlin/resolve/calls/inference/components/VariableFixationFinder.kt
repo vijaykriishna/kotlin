@@ -120,7 +120,10 @@ class VariableFixationFinder(
 
     private fun Context.hasDependencyToOtherTypeVariables(typeVariable: TypeConstructorMarker): Boolean {
         for (constraint in notFixedTypeVariables[typeVariable]?.constraints ?: return false) {
-            if (constraint.type.lowerBoundIfFlexible().argumentsCount() != 0 && constraint.type.contains { notFixedTypeVariables.containsKey(it.typeConstructor()) }) {
+            if (constraint.type.lowerBoundIfFlexible().argumentsCount() != 0
+                && constraint.type.contains {
+                    it.typeConstructor() != typeVariable && notFixedTypeVariables.containsKey(it.typeConstructor())
+                }) {
                 return true
             }
         }
